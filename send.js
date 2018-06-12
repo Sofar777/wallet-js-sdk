@@ -2,10 +2,10 @@
 * @Author: Mr.Sofar
 * @Date:   2018-06-08 17:10:24
 * @Last Modified by:   Mr.Sofar
-* @Last Modified time: 2018-06-12 12:47:16
+* @Last Modified time: 2018-06-14 18:18:50
 */
-var Web3 = require("web3")
-var web3 = new Web3(new Web3.providers.HttpProvider("http://47.104.166.51:22000"));
+var config = require('./config')
+var web3 = require('./web3')(config.nodeEnv.formal);
 var argv = require('./argv')
 var fs = require("fs");
 var rawIndex = 0;
@@ -14,7 +14,12 @@ fs.readFile('./raw_data/' + argv.l,(err,data) => {
 	if(err){
 		console.log(err);
 	} else {
-		rawList = data.toString().split("\n");
+		rawList = [];
+		data.toString().split("\n").forEach((v,i) => {
+			if(v !== ""){
+				rawList.push(v);
+			}
+		});
 		sendRawData(rawList[rawIndex]);
 	}
 })
@@ -25,19 +30,23 @@ function sendRawData(rawData) {
 		return false;
 	}
 	web3.eth.sendSignedTransaction(rawData,(err,data) => {
-		setTimeout(function(){
-			if(rawIndex < rawList.length){
-				rawIndex ++;
-				sendRawData(rawList[rawIndex]);
-			}else {
-				console.log("任务完成，总发出"+ rawList.length + "条");
-			}
-		},500)
-		console.log(web3.utils.sha3(rawData));
-		console.log("==========================================")
+		if(err){
+			console.log(err);
+		}
+		try{
+			console.log(web3.utils.sha3(rawData));
+			setTimeout(function(){
+				if(rawIndex < rawList.length -1){
+					rawIndex ++;
+					sendRawData(rawList[rawIndex]);
+				}else{
+					console.log("总共处理：" + rawList.length + "条");
+				}
+			},500)
+		}catch(e){
+			console.log(e);
+		}
 	})
-	
-	
 }
 
 	
