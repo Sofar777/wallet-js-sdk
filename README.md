@@ -1,11 +1,11 @@
 ## WALLET JS SDK
-
+Author: [Mr.Sofar](http://sofar.top)
 ### 功能
-1、生成钱包地址
-2、离线签名
-3、广播交易
+- 生成钱包地址
+- 离线签名
+- 广播交易
 
-### 安装
+### 安装使用
 ```
 # 进入文件目录
 cd /your/path
@@ -32,16 +32,18 @@ node app.js -e send -l 18.log
 ```
 
 ### 文件目录结构介绍
+```
 .
-├── README.md 				# README
-├── app.js 					# 项目主文件
-├── argv.js 				# 命令行参数定义文件
-├── generate.js 			# 以太坊地址生成文件
-├── keystore   				# keystore 地址存放文件夹
+├── app.js				// 项目主文件
+├── README.md				// README
+├── argv.js				// 命令行参数定义文件
+├── generate.js				// 以太坊地址生成文件
+├── keystore				// keystore 地址存放文件夹
 ├── package.json 
-├── raw_data  				# 签名日志存放文件夹
-├── send.js 				# 发送交易
-├── sign.js 				# 离线签名
-├── test.js 				# 测试代码
-└── test.txt 				# 接收地址
+├── raw_data				// 签名日志存放文件夹
+├── send.js				// 发送交易
+├── sign.js				// 离线签名
+├── test.js				// 测试代码
+└── test.txt				// 接收地址
+```
 
