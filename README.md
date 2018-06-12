@@ -14,26 +14,34 @@ cd /your/path
 npm i
 
 # 生成新地址
-node app.js -e generate -p 密码
+node app.js -e generate -p 定义密码
 
 # 签名 
-node app.js -e signEth -s 7cb1ae12d905ece79a4666b4dc5a04d9e312564d -p 123123 -n 0 -f test.txt
+# -s 发币地址 
+# -p 密码 
+# -n nonce值 
+# -f 接收地址文件 
+# -c 合约地址 
+# -l 定义日志文件名
+node app.js -e sign -s 0x4d4210ee19a5079c60253b2c97bfc305e96b3fa8 -p 123123 -n 0 -f test.txt -l 18.log
+
+# 发送交易
+# -l 签名生成的日志文件名
+node app.js -e send -l 18.log
+
 ```
 
 ### 文件目录结构介绍
 .
-├── README.md
-├── app.js 					# 主文件
-├── generate.js 			# 生成以太坊地址
-├── keystore 				# keystore存储文件
-├── package-lock.json
-├── package.json 			
-├── raw_data 				# 离线签名数据
-├── sing-eth.js 			# ETH转账 离线签名
-└── test.js 				# 测试文件
-
-### 使用命令
-```
-node app.js -g
-```
+├── README.md 				# README
+├── app.js 					# 项目主文件
+├── argv.js 				# 命令行参数定义文件
+├── generate.js 			# 以太坊地址生成文件
+├── keystore   				# keystore 地址存放文件夹
+├── package.json 
+├── raw_data  				# 签名日志存放文件夹
+├── send.js 				# 发送交易
+├── sign.js 				# 离线签名
+├── test.js 				# 测试代码
+└── test.txt 				# 接收地址
 
