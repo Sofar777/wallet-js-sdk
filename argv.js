@@ -2,7 +2,7 @@
 * @Author: Mr.Sofar
 * @Date:   2018-06-08 15:07:15
 * @Last Modified by:   Mr.Sofar
-* @Last Modified time: 2018-06-14 14:34:47
+* @Last Modified time: 2018-06-14 16:24:22
 */
 
 var argv = require('yargs')
@@ -39,7 +39,7 @@ var argv = require('yargs')
     })
     // 批量发币合约地址 airdrop
     .option('a', {
-      alias : 'log',
+      alias : 'airdropAddress',
       type: 'string'
     })
     .argv;
