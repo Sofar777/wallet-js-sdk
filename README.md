@@ -34,16 +34,18 @@ node app.js -e send -l 18.log
 ### 文件目录结构介绍
 ```
 .
-├── app.js				// 项目主文件
-├── README.md				// README
-├── argv.js				// 命令行参数定义文件
-├── generate.js				// 以太坊地址生成文件
-├── keystore				// keystore 地址存放文件夹
-├── package.json 
-├── raw_data				// 签名日志存放文件夹
-├── send.js				// 发送交易
-├── sign.js				// 离线签名
-├── test.js				// 测试代码
-└── test.txt				// 接收地址
+├── app.js                  // 项目主文件
+├── README.md               // README
+├── argv.js                 // 命令行参数定义文件
+├── generate.js             // 以太坊地址生成文件
+├── keystore                // keystore 地址存放文件夹
+├── package.json  
+├── raw_data                // 签名日志存放文件夹
+├── send.js                 // 发送交易
+├── sign.js                 // 离线签名
+├── test.js                 // 测试代码
+└── test.txt                // 接收地址
 ```
+### 工具
+[input data 生成器](https://abi.hashex.org/)
 

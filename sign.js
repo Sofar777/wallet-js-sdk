@@ -2,15 +2,15 @@
 * @Author: Mr.Sofar
 * @Date:   2018-06-08 12:47:28
 * @Last Modified by:   Mr.Sofar
-* @Last Modified time: 2018-06-12 12:41:33
+* @Last Modified time: 2018-06-12 16:32:36
 */
 var keythereum = require("keythereum");
 var Tx = require('ethereumjs-tx');
-var Web3 = require("web3")
 var BigNumber = require('bignumber.js');
 var fs = require('fs');
 var argv = require('./argv')
-var web3 = new Web3(new Web3.providers.HttpProvider("http://47.104.166.51:22000"));
+var config = require('./config')
+var web3 = require('./web3')(config.nodeEnv.test);
 var keyObject = keythereum.importFromFile(argv.s, "./");
 var privateKey = keythereum.recover(argv.p.toString(), keyObject);
 const readline = require('readline')
@@ -50,28 +50,22 @@ fs.readFile("test.txt",'utf-8',function(err,data){
     	})
     	singData(receiveList[receiveIndex].address,receiveList[receiveIndex].value,nonce)
     }  
-}); 
+});
 function singData(receiveAddr,value,_nonce){
-	let rawTx;
+	let rawTx = {
+		nonce: web3.utils.fromDecimal(new BigNumber(_nonce)),
+	    from: argv.s,
+	    gasLimit: '0x6ddd00',
+	    gasPrice: '0x165a0bc00'
+	}
 	if(argv.c !== "undefined"){
 		// 合约代币转账
-		rawTx = {
-		    nonce: web3.utils.fromDecimal(new BigNumber(_nonce)),
-		    from: argv.s,
-		    gasLimit: '0x6ddd00',
-		    to: argv.c,
-		    data: "",
-		    // 方法hash + 地址 + 十六进制 value
-		    data: "0xa9059cbb" + jointZero(receiveAddr.substr(2)) + jointZero(web3.utils.fromDecimal(web3.utils.toWei(new BigNumber(value).toString())).substr(2)),
-		}
-	}else {
-		rawTx = {
-		    nonce: web3.utils.fromDecimal(new BigNumber(_nonce)),
-		    from: argv.s,
-		    gasLimit: '0xffff',
-		    to: receiveAddr,
-		    value: web3.utils.fromDecimal(web3.utils.toWei(new BigNumber(value).toString()))
-		}
+		rawTx.to = argv.c;
+		// 方法hash + 地址 + 十六进制 value
+		rawTx.data = "0xa9059cbb" + jointZero(receiveAddr.substr(2)) + jointZero(web3.utils.fromDecimal(web3.utils.toWei(new BigNumber(value).toString())).substr(2));
+	} else {
+		rawTx.to = receiveAddr;
+		rawTx.value = web3.utils.fromDecimal(web3.utils.toWei(new BigNumber(value).toString()));
 	}
 	tx = new Tx(rawTx);
 	tx.sign(privateKey);
@@ -98,4 +92,11 @@ function appendFile(){
 			}
 		}
 	})
+}
+function jointZero(str){
+	let txt = '';
+	for(let i = 0; i < 64 - str.length; i++){
+		txt += 0;
+	}
+	return txt + str;
 }
