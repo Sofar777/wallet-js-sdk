@@ -2,6 +2,5 @@ node_modules
 keystore/*
 raw_data/*
 test.md
-config.js
 test-backup
 rinkeby.md
