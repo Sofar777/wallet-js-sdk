@@ -2,7 +2,7 @@
 * @Author: Mr.Sofar
 * @Date:   2018-06-08 12:47:28
 * @Last Modified by:   Mr.Sofar
-* @Last Modified time: 2018-06-12 16:32:36
+* @Last Modified time: 2018-06-19 16:42:59
 */
 var keythereum = require("keythereum");
 var Tx = require('ethereumjs-tx');
@@ -14,11 +14,12 @@ var web3 = require('./web3')(config.nodeEnv.test);
 var keyObject = keythereum.importFromFile(argv.s, "./");
 var privateKey = keythereum.recover(argv.p.toString(), keyObject);
 const readline = require('readline')
-
+if(!fs.existsSync(__dirname + "/raw_data")){
+  fs.mkdirSync(__dirname + "/raw_data");
+}
 const lineData = readline.createInterface({
     input: fs.createReadStream(argv.f)
 });
-
 var nonce = argv.n;
 var thisIndex = 1;
 // lineData.on('line', (line) => {
@@ -33,7 +34,7 @@ var thisIndex = 1;
 let receiveList = [];
 let receiveIndex = 0;
 let SCRIPT_STATUS = false;
-let logFilePath = "./raw_data/"+argv.l
+let logFilePath = "./raw_data/" + argv.l
 fs.readFile("test.txt",'utf-8',function(err,data){  
     if(err){  
         console.log("error");  
