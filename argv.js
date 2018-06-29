@@ -2,14 +2,13 @@
 * @Author: Mr.Sofar
 * @Date:   2018-06-08 15:07:15
 * @Last Modified by:   Mr.Sofar
-* @Last Modified time: 2018-06-14 16:24:22
+* @Last Modified time: 2018-06-26 10:30:55
 */
 
 var argv = require('yargs')
 	// 方法
 	.option('e', {
     	alias : 'execute',
-    	default: 'generate',
     	type: 'string'
   	})
   	//转账地址

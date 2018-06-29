@@ -2,7 +2,7 @@
 * @Author: Mr.Sofar
 * @Date:   2018-06-08 12:47:28
 * @Last Modified by:   Mr.Sofar
-* @Last Modified time: 2018-06-14 18:16:53
+* @Last Modified time: 2018-06-26 19:48:46
 */
 var keythereum = require("keythereum");
 var Tx = require('ethereumjs-tx');
@@ -36,19 +36,20 @@ let receiveIndex = 0;
 let SCRIPT_STATUS = false;
 let logFilePath = "./raw_data/" + argv.l;
 console.log(argv);
-fs.readFile("test.txt",'utf-8',function(err,data){  
+fs.readFile(argv.f,'utf-8',function(err,data){  
     if(err){  
         console.log("error");  
     }else{  
     	var _arr = [[],[]];
-    	let lineData = data.toString().split("\n");
+    	// console.log(data.toString())
+    	let lineData = data.toString().split("\r");
     	lineData.forEach((v,i) => {
     		let item = v.split("\t")
     		if(item[0] !== ""){
     			_arr[0].push(item[0]);
     			_arr[1].push(web3.utils.toWei(item[1]));
     		}
-    		if(((i+1)%3 === 0 && i !== 0) || i === lineData.length-1){
+    		if(((i+1)%100 === 0 && i !== 0) || i === lineData.length-1){
     			if(_arr[0].length > 0){
     				receiveList.push(_arr);
     				_arr = [[],[]];
@@ -63,15 +64,15 @@ function singData(arr,_nonce){
 	let rawTx = {
 		nonce: web3.utils.fromDecimal(new BigNumber(_nonce)),
 	    from: argv.s,
-	    gasLimit: '0x0249f0',
-	    // gasPrice: '0x0165a0bc00'
-	    gasPrice: '0x028fa6ae00'
+	    // gasLimit: '0x6ddd00', //720000
+	    gasLimit: web3.utils.toHex(7200000), //5000000
+	    gasPrice: '0x012a05f200' //5Gwei
 	}
 	if(argv.a !== "undefined"){
 		// 合约代币批量
 		rawTx.to = argv.a;
 		// 方法hash + 地址 + 十六进制 value
-		console.log(jointData(arr));
+		// console.log(jointData(arr));
 		rawTx.data = jointData(arr);
 
 		let tx = new Tx(rawTx);
@@ -86,7 +87,7 @@ function singData(arr,_nonce){
 		}
 		appendFile(tx);
 	} else {
-		console.log("-c 合约参数不合法");
+		console.log("请携带空投合约参数");
 	}
 }
 // 写入文本
@@ -104,8 +105,8 @@ function appendFile(tx){
 	})
 }
 function jointData(arr){
-	let methodId = abi.methodID('batch', ['address', 'address', "address[]", "uint256[]"]).toString('hex')
-	let encoded = abi.rawEncode(["address","address",'address[]',"uint256[]"], [argv.c,argv.s,arr[0],arr[1]]).toString("hex")
+	let methodId = abi.methodID('batch', ['address', "address[]", "uint256[]"]).toString('hex')
+	let encoded = abi.rawEncode(["address",'address[]',"uint256[]"], [argv.c,arr[0],arr[1]]).toString("hex")
 	return "0x" + methodId + encoded;
 }
 
